@@ -16,8 +16,11 @@ class ProductoAdapter {
       marca: formData.marca,
       categoria_id: formData.categoriaID === 0 || formData.categoriaID === "" ? null : parseInt(formData.categoriaID),
       precio: ProductoAdapter.parseDecimal(formData.precio),
+      precio_compra_base: formData.precio_compra_base ? ProductoAdapter.parseDecimal(formData.precio_compra_base) : null,
       stock: parseInt(formData.cantidad, 10),
       proveedor_id: formData.proveedorID === 0 || formData.proveedorID === "" ? null : parseInt(formData.proveedorID),
+      es_medicamento: formData.es_medicamento === true || formData.es_medicamento === "true",
+      porcentaje_iva: formData.porcentaje_iva ? ProductoAdapter.parseDecimal(formData.porcentaje_iva) : 21,
       usuario_id: usuarioId,
     };
   }
@@ -73,7 +76,11 @@ class ProductoAdapter {
       marca: formData.marca,
       categoria_id: formData.categoriaID === 0 || formData.categoriaID === "" ? null : parseInt(formData.categoriaID),
       precio: ProductoAdapter.parseDecimal(formData.precio),
+      precio_compra_base: formData.precio_compra_base ? ProductoAdapter.parseDecimal(formData.precio_compra_base) : null,
       stock: parseInt(formData.cantidad, 10),
+      proveedor_id: formData.proveedorID === 0 || formData.proveedorID === "" ? null : parseInt(formData.proveedorID),
+      es_medicamento: formData.es_medicamento === true || formData.es_medicamento === "true",
+      porcentaje_iva: formData.porcentaje_iva ? ProductoAdapter.parseDecimal(formData.porcentaje_iva) : 21,
       usuario_id: usuarioId,
     };
   }

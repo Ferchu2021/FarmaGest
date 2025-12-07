@@ -15,22 +15,43 @@ const ProductFormModal = ({ Categorias, Proveedores = [], usuarioId }) => {
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
       categoriaID: "", // Valor por defecto vacío
       categoriaDesc: "", // Valor por defecto vacío
+      porcentaje_iva: 21,
+      es_medicamento: false,
     },
   });
 
   const [show, setShow] = useState(false);
+  const [precioCalculado, setPrecioCalculado] = useState(null);
+  const [mostrarPrecioCalculado, setMostrarPrecioCalculado] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     reset();
+    setPrecioCalculado(null);
+    setMostrarPrecioCalculado(false);
   };
 
   const handleShow = () => setShow(true);
+  
+  const calcularPrecio = (precioCompraBase, esMedicamento, porcentajeIVA) => {
+    if (!precioCompraBase || precioCompraBase <= 0) {
+      setMostrarPrecioCalculado(false);
+      return;
+    }
+    
+    const porcentajeGanancia = esMedicamento ? 25 : 30;
+    const precioConGanancia = precioCompraBase * (1 + porcentajeGanancia / 100);
+    const precioFinal = precioConGanancia * (1 + (porcentajeIVA || 21) / 100);
+    
+    setPrecioCalculado(precioFinal.toFixed(2));
+    setMostrarPrecioCalculado(true);
+  };
 
   const handleAddProduct = (data) => {
     try {
@@ -133,7 +154,81 @@ const ProductFormModal = ({ Categorias, Proveedores = [], usuarioId }) => {
                 )}
               </div>
               <div className="form-group col-md-12">
-                <label htmlFor="precio">Precio:</label>
+                <label htmlFor="es_medicamento">
+                  <input
+                    type="checkbox"
+                    id="es_medicamento"
+                    {...register("es_medicamento")}
+                    onChange={(e) => {
+                      setValue("es_medicamento", e.target.checked);
+                      const precioCompra = watch("precio_compra_base");
+                      const porcentajeIVA = watch("porcentaje_iva");
+                      if (precioCompra) {
+                        calcularPrecio(precioCompra, e.target.checked, porcentajeIVA);
+                      }
+                    }}
+                    style={{ marginRight: "8px" }}
+                  />
+                  Es Medicamento (25% ganancia) - Si no está marcado, aplica 30% ganancia
+                </label>
+              </div>
+              <div className="form-group col-md-6">
+                <label htmlFor="precio_compra_base">Precio de Compra Base (sin ganancias ni IVA):</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  id="precio_compra_base"
+                  className="form-control"
+                  {...register("precio_compra_base")}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 0;
+                    setValue("precio_compra_base", value);
+                    const esMedicamento = watch("es_medicamento");
+                    const porcentajeIVA = watch("porcentaje_iva");
+                    calcularPrecio(value, esMedicamento, porcentajeIVA);
+                    if (mostrarPrecioCalculado && precioCalculado) {
+                      setValue("precio", precioCalculado);
+                    }
+                  }}
+                />
+              </div>
+              <div className="form-group col-md-6">
+                <label htmlFor="porcentaje_iva">Porcentaje IVA (%):</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  id="porcentaje_iva"
+                  className="form-control"
+                  defaultValue="21"
+                  {...register("porcentaje_iva")}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 21;
+                    setValue("porcentaje_iva", value);
+                    const precioCompra = watch("precio_compra_base");
+                    const esMedicamento = watch("es_medicamento");
+                    if (precioCompra) {
+                      calcularPrecio(precioCompra, esMedicamento, value);
+                    }
+                  }}
+                />
+              </div>
+              {mostrarPrecioCalculado && precioCalculado && (
+                <div className="form-group col-md-12">
+                  <div style={{ 
+                    padding: "10px", 
+                    backgroundColor: "#d1fae5", 
+                    borderRadius: "4px",
+                    border: "1px solid #10b981"
+                  }}>
+                    <strong>Precio de Venta Calculado: ${parseFloat(precioCalculado).toLocaleString('es-AR', { minimumFractionDigits: 2 })}</strong>
+                    <p style={{ margin: "5px 0 0 0", fontSize: "12px", color: "#065f46" }}>
+                      (Incluye {watch("es_medicamento") ? "25%" : "30%"} de ganancia + {watch("porcentaje_iva") || 21}% IVA)
+                    </p>
+                  </div>
+                </div>
+              )}
+              <div className="form-group col-md-12">
+                <label htmlFor="precio">Precio de Venta (se puede modificar manualmente):</label>
                 <input
                   type="text"
                   id="precio"
