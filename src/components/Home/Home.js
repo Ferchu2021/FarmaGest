@@ -1,10 +1,12 @@
 import React from "react";
 import AlertasVencimientos from "./AlertasVencimientos";
+import NotificacionesIA from "./NotificacionesIA";
 
 const Home = () => {
   return (
     <div style={{ padding: "20px" }}>
       <h1 style={{ marginBottom: "20px", color: "#1f2937" }}>Dashboard</h1>
+      <NotificacionesIA />
       <AlertasVencimientos />
       <div
         style={{

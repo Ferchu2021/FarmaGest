@@ -24,6 +24,7 @@ import ResetForgottenPassword from "../components/login/ResetForgottenPassword";
 import ProductosPorVencer from "../components/Lotes/ProductosPorVencer";
 import ReporteVencimientos from "../components/Lotes/ReporteVencimientos";
 import Lotes from "../components/Lotes/Lotes";
+import DashboardPredicciones from "../components/Predicciones/DashboardPredicciones";
 
 const AppRouter = () => {
   const logged = JSON.parse(sessionStorage.getItem("logged"));
@@ -144,6 +145,14 @@ const AppRouter = () => {
               element={
                 <Layout title={"reporte-vencimientos"}>
                   <ReporteVencimientos />
+                </Layout>
+              }
+            />
+            <Route
+              path="/predicciones"
+              element={
+                <Layout title={"predicciones"}>
+                  <DashboardPredicciones />
                 </Layout>
               }
             />

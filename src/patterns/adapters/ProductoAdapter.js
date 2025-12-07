@@ -108,7 +108,9 @@ class ProductoAdapter {
     if (value === null || value === undefined) return 0;
     const normalized = String(value).replace(",", ".");
     const result = parseFloat(normalized);
-    return isNaN(result) ? 0 : result;
+    if (isNaN(result)) return 0;
+    // Redondear a 2 decimales para mantener consistencia con DECIMAL(10,2) de la BD
+    return Math.round(result * 100) / 100;
   }
 }
 

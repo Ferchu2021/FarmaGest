@@ -14,6 +14,7 @@ import { ImUserTie } from "react-icons/im";
 import { AiOutlineFileSearch } from "react-icons/ai";
 import { BiPackage } from "react-icons/bi";
 import { MdReportProblem } from "react-icons/md";
+import { FaChartLine } from "react-icons/fa";
 import UsuarioLogout from "../components/Usuarios/UsuarioLogout";
 
 const Layout = ({ children, title }) => {
@@ -75,6 +76,8 @@ const Layout = ({ children, title }) => {
                         return "Productos por Vencer";
                       case "reporte-vencimientos":
                         return "Reporte de Pérdidas";
+                      case "predicciones":
+                        return "Predicciones IA";
                       default:
                         return capitalizeFirstLetter(title);
                     }
@@ -145,6 +148,9 @@ const Layout = ({ children, title }) => {
               </Link>
               <Link to="/lotes/reporte-perdidas">
                 <MdReportProblem className="iconMenu" />
+              </Link>
+              <Link to="/predicciones">
+                <FaChartLine className="iconMenu" />
               </Link>
             </>
           )}
@@ -219,6 +225,10 @@ const Layout = ({ children, title }) => {
               <Link className="itemMenu" to="/lotes/reporte-perdidas">
                 <MdReportProblem className="iconMenu" />
                 <span>Pérdidas</span>
+              </Link>
+              <Link className="itemMenu" to="/predicciones">
+                <FaChartLine className="iconMenu" />
+                <span>Predicciones IA</span>
               </Link>
             </>
           )}
