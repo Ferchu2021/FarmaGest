@@ -11,6 +11,7 @@ import auditoriaClientesDataSlice from "../redux/auditoriaClientesSlice";
 import auditoriaObrasSocialesDataSlice from "../redux/auditoriaObrasSocialesSlice";
 import liquidacionObrasSocialesDataSlice from "../redux/liquidacionObrasSocialesSlice";
 import sesionesDataSlice from "../redux/sesionesSlice";
+import lotesDataSlice from "../redux/lotesSlice";
 
 export default configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export default configureStore({
     auditoriaObrasSociales: auditoriaObrasSocialesDataSlice,
     liquidacionObrasSociales: liquidacionObrasSocialesDataSlice,
     sesiones: sesionesDataSlice,
+    lotes: lotesDataSlice,
   },
 });

@@ -9,9 +9,11 @@ import { AiFillProduct } from "react-icons/ai";
 import { IoBarChart } from "react-icons/io5";
 import { RiShoppingBag4Fill } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi";
-import { FaBell, FaShoppingCart } from "react-icons/fa";
+import { FaBell, FaShoppingCart, FaCalendarTimes } from "react-icons/fa";
 import { ImUserTie } from "react-icons/im";
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { BiPackage } from "react-icons/bi";
+import { MdReportProblem } from "react-icons/md";
 import UsuarioLogout from "../components/Usuarios/UsuarioLogout";
 
 const Layout = ({ children, title }) => {
@@ -69,6 +71,10 @@ const Layout = ({ children, title }) => {
                     switch (title) {
                       case "obras-sociales":
                         return "Obras Sociales";
+                      case "productos-por-vencer":
+                        return "Productos por Vencer";
+                      case "reporte-vencimientos":
+                        return "Reporte de Pérdidas";
                       default:
                         return capitalizeFirstLetter(title);
                     }
@@ -129,6 +135,19 @@ const Layout = ({ children, title }) => {
               <AiOutlineFileSearch className="iconMenu" />
             </Link>
           )}
+          {permisos.includes("gestion_productos") && (
+            <>
+              <Link to="/lotes">
+                <BiPackage className="iconMenu" />
+              </Link>
+              <Link to="/lotes/por-vencer">
+                <FaCalendarTimes className="iconMenu" />
+              </Link>
+              <Link to="/lotes/reporte-perdidas">
+                <MdReportProblem className="iconMenu" />
+              </Link>
+            </>
+          )}
         </nav>
 
         <nav className={isOpen ? "bigActive" : "bigInactive"}>
@@ -186,6 +205,22 @@ const Layout = ({ children, title }) => {
               <AiOutlineFileSearch className="iconMenu" />
               <span>Auditoría</span>
             </Link>
+          )}
+          {permisos.includes("gestion_productos") && (
+            <>
+              <Link className="itemMenu" to="/lotes">
+                <BiPackage className="iconMenu" />
+                <span>Lotes</span>
+              </Link>
+              <Link className="itemMenu" to="/lotes/por-vencer">
+                <FaCalendarTimes className="iconMenu" />
+                <span>Por Vencer</span>
+              </Link>
+              <Link className="itemMenu" to="/lotes/reporte-perdidas">
+                <MdReportProblem className="iconMenu" />
+                <span>Pérdidas</span>
+              </Link>
+            </>
           )}
         </nav>
 

@@ -21,6 +21,9 @@ import Auditoria from "../components/Auditoria/Auditoria";
 import Sesiones from "../components/Auditoria/Sesiones";
 import ForgotPassword from "../components/login/ForgotPassword";
 import ResetForgottenPassword from "../components/login/ResetForgottenPassword";
+import ProductosPorVencer from "../components/Lotes/ProductosPorVencer";
+import ReporteVencimientos from "../components/Lotes/ReporteVencimientos";
+import Lotes from "../components/Lotes/Lotes";
 
 const AppRouter = () => {
   const logged = JSON.parse(sessionStorage.getItem("logged"));
@@ -117,6 +120,30 @@ const AppRouter = () => {
               element={
                 <Layout title={"sesiones"}>
                   <Sesiones />
+                </Layout>
+              }
+            />
+            <Route
+              path="/lotes"
+              element={
+                <Layout title={"lotes"}>
+                  <Lotes />
+                </Layout>
+              }
+            />
+            <Route
+              path="/lotes/por-vencer"
+              element={
+                <Layout title={"productos-por-vencer"}>
+                  <ProductosPorVencer />
+                </Layout>
+              }
+            />
+            <Route
+              path="/lotes/reporte-perdidas"
+              element={
+                <Layout title={"reporte-vencimientos"}>
+                  <ReporteVencimientos />
                 </Layout>
               }
             />

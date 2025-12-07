@@ -8,9 +8,11 @@ import {
   selectProductos,
 } from "../../redux/productosSlice";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { FaBox } from "react-icons/fa";
 import Swal from "sweetalert2";
 import ProductForm from "./ProductForm";
 import EditProductFormModal from "./EditProductForm";
+import LotesProducto from "./LotesProducto";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -18,6 +20,8 @@ const Products = () => {
   const [search, setSearch] = useState("");
   const [marcaFilter, setMarcaFilter] = useState("");
   const [proveedorFilter, setProveedorFilter] = useState("");
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [showLotesModal, setShowLotesModal] = useState(false);
 
   const pageSize = 8;
   const logged = JSON.parse(sessionStorage.getItem("logged"));
@@ -212,6 +216,15 @@ const Products = () => {
                     );
                   })}
                   <td style={{ flexWrap: "nowrap" }}>
+                    <FaBox
+                      className="iconABM"
+                      style={{ color: "#3b82f6", cursor: "pointer", marginRight: "8px" }}
+                      onClick={() => {
+                        setProductoSeleccionado(dato);
+                        setShowLotesModal(true);
+                      }}
+                      title="Ver lotes"
+                    />
                     <EditProductFormModal
                       productSelected={dato}
                       Categorias={Categorias}
@@ -255,6 +268,16 @@ const Products = () => {
           Siguiente
         </button>
       </div>
+      {showLotesModal && productoSeleccionado && (
+        <LotesProducto
+          producto={productoSeleccionado}
+          usuarioId={usuarioId}
+          onClose={() => {
+            setShowLotesModal(false);
+            setProductoSeleccionado(null);
+          }}
+        />
+      )}
     </div>
   );
 };
