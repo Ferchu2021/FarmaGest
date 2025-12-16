@@ -150,11 +150,49 @@ export const addClienteAPI = (clienteData) => {
       }
     } catch (error) {
       console.error("Error al agregar cliente:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Hubo un problema al agregar el cliente.",
-      });
+      
+      // Manejar diferentes tipos de errores
+      if (error.response) {
+        const status = error.response.status;
+        const mensaje = error.response.data?.mensaje || error.response.data?.message;
+        
+        if (status === 409) {
+          // DNI duplicado
+          Swal.fire({
+            icon: "warning",
+            title: "DNI duplicado",
+            text: mensaje || "El DNI ingresado ya está registrado. Por favor, verifica el DNI e intenta nuevamente.",
+          });
+        } else if (status === 400) {
+          // Error de validación
+          Swal.fire({
+            icon: "warning",
+            title: "Error de validación",
+            text: mensaje || "Por favor, completa todos los campos requeridos correctamente.",
+          });
+        } else {
+          // Otro error del servidor
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: mensaje || "Hubo un problema al agregar el cliente. Inténtalo nuevamente.",
+          });
+        }
+      } else if (error.request) {
+        // Error de conexión
+        Swal.fire({
+          icon: "error",
+          title: "Error de conexión",
+          text: "No se pudo conectar con el servidor. Verifica que el backend esté corriendo.",
+        });
+      } else {
+        // Otro error
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al agregar el cliente.",
+        });
+      }
     }
   };
 };

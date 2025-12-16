@@ -245,3 +245,10 @@ const LotesProducto = ({ producto, usuarioId, onClose }) => {
 
 export default LotesProducto;
 
+
+
+
+
+
+
+

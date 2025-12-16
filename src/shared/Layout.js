@@ -27,17 +27,25 @@ const Layout = ({ children, title }) => {
   // Validar que logged y sesion existan antes de acceder a permisos
   // Si logged es null, usar un array vacío
   // Si logged.sesion no existe, usar un array vacío
-  // Si permisos no existe o no es un array, usar un array vacío
+  // Si permisos no existe o no es un array, convertir string a array
   let permisos = [];
   if (logged && logged.sesion) {
-    permisos = Array.isArray(logged.sesion.permisos) 
-      ? logged.sesion.permisos 
-      : (logged.sesion.permisos ? [logged.sesion.permisos] : []);
+    if (logged.sesion.permisos) {
+      if (Array.isArray(logged.sesion.permisos)) {
+        permisos = logged.sesion.permisos;
+      } else if (typeof logged.sesion.permisos === 'string') {
+        // Convertir string separado por comas a array
+        permisos = logged.sesion.permisos.split(',').map(p => p.trim()).filter(p => p.length > 0);
+      } else {
+        permisos = [logged.sesion.permisos];
+      }
+    }
   }
   
   // Debug: mostrar en consola si no hay permisos (solo en desarrollo)
   if (process.env.NODE_ENV === 'development' && permisos.length === 0 && logged) {
     console.warn('⚠️ No se encontraron permisos en sessionStorage:', logged);
+    console.warn('⚠️ Permisos raw:', logged.sesion?.permisos);
   }
 
   return (

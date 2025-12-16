@@ -242,3 +242,10 @@ const LoteForm = ({ usuarioId }) => {
 
 export default LoteForm;
 
+
+
+
+
+
+
+

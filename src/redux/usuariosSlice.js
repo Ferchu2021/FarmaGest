@@ -120,10 +120,20 @@ export const getRolesAPI = () => {
       const response = await axios.get(`${API}/usuarios/roles`);
 
       if (response.status === 200) {
-        dispatch(getRoles(response.data));
+        // Asegurarse de que response.data es un array
+        const roles = Array.isArray(response.data) ? response.data : (response.data?.rows || []);
+        console.log("Roles obtenidos:", roles);
+        dispatch(getRoles(roles));
       }
     } catch (error) {
       console.error("Error al obtener roles:", error);
+      console.error("Detalles del error:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      // En caso de error, establecer un array vacío para evitar errores en el frontend
+      dispatch(getRoles([]));
     }
   };
 };
@@ -259,32 +269,46 @@ export const getUsuarioLoginAPI = (
         dispatch(getUsuarioLogin(response.data));
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        const mensaje =
-          error.response.data?.mensaje ||
-          error.response.data ||
-          "Usuario o contraseña incorrectos";
-        Swal.fire({
-          icon: "warning",
-          title: "Advertencia!",
-          text: mensaje,
-        });
-      } else if (error.response && error.response.status) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text:
-            error.response.data?.mensaje ||
-            error.response.data ||
-            `Error ${error.response.status}`,
-        });
-      } else {
+      // Verificar si es un error de conexión (sin response)
+      if (!error.response) {
         // Error de conexión o backend no disponible
         Swal.fire({
           icon: "error",
           title: "Error de conexión",
           text: "No se pudo conectar con el servidor. Verifica que el backend esté corriendo.",
         });
+        // Limpiar el estado de login
+        dispatch(getUsuarioLogin({}));
+        return;
+      }
+
+      // Si hay response, es un error del servidor
+      if (error.response.status === 401) {
+        // Error de autenticación (usuario o contraseña incorrectos)
+        const mensaje =
+          (typeof error.response.data === 'object' && error.response.data?.mensaje) ||
+          (typeof error.response.data === 'string' && error.response.data) ||
+          "Usuario o contraseña incorrectos";
+        Swal.fire({
+          icon: "warning",
+          title: "Advertencia!",
+          text: mensaje,
+        });
+        // Limpiar el estado de login
+        dispatch(getUsuarioLogin({}));
+      } else if (error.response.status) {
+        // Otro error del servidor
+        const mensaje =
+          (typeof error.response.data === 'object' && error.response.data?.mensaje) ||
+          (typeof error.response.data === 'string' && error.response.data) ||
+          `Error ${error.response.status}`;
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: mensaje,
+        });
+        // Limpiar el estado de login
+        dispatch(getUsuarioLogin({}));
       }
     }
   };

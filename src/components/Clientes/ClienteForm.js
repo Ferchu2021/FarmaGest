@@ -142,14 +142,19 @@ const ClienteFormModal = ({ Ciudades, ObrasSociales, usuarioId }) => {
                   })}
                 >
                   <option value="">Seleccionar obra social</option>
-                  {ObrasSociales?.map((obraSocial) => (
-                    <option
-                      key={obraSocial.obra_social_id}
-                      value={obraSocial.obra_social_id}
-                    >
-                      {obraSocial.obra_social}
-                    </option>
-                  ))}
+                  {ObrasSociales && Array.isArray(ObrasSociales) && ObrasSociales
+                    .filter((obraSocial, index, self) => 
+                      // Filtrar duplicados por nombre de obra social
+                      index === self.findIndex((o) => o.obra_social === obraSocial.obra_social)
+                    )
+                    .map((obraSocial) => (
+                      <option
+                        key={obraSocial.obra_social_id}
+                        value={obraSocial.obra_social_id}
+                      >
+                        {obraSocial.obra_social}
+                      </option>
+                    ))}
                 </select>
                 {errors.obraSocialID && (
                   <p className="text-danger">{errors.obraSocialID.message}</p>

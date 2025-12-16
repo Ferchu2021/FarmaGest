@@ -168,3 +168,10 @@ const Lotes = () => {
 
 export default Lotes;
 
+
+
+
+
+
+
+

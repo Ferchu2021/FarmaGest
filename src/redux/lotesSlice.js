@@ -224,3 +224,10 @@ export const updateCantidadLoteAPI = (loteId, nuevaCantidad, motivo, usuarioId) 
 
 export default lotesSlice.reducer;
 
+
+
+
+
+
+
+

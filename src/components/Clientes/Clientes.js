@@ -108,8 +108,8 @@ const Clientes = () => {
                     column !== "obra_social_id" &&
                     column !== "ciudad_id"
                 )
-                .map((column) => (
-                  <th key={column}>
+                .map((column, index) => (
+                  <th key={`header-${column}-${index}`}>
                     {column == "obra_social" ? "Obra Social" : column}
                   </th>
                 ))}

@@ -75,3 +75,10 @@ export const getPrediccionesIAPI = (dias = 60) => async (dispatch) => {
 
 export default notificacionesIASlice.reducer;
 
+
+
+
+
+
+
+
